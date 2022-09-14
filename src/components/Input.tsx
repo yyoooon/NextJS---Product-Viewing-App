@@ -19,7 +19,6 @@ export default Input;
 
 const Container = styled.div`
   width: 100%;
-  max-width: 327px;
 `;
 
 const Label = styled.label`
