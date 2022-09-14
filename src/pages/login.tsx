@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { NextPage } from 'next';
 import React from 'react';
 import styled from '@emotion/styled';
+import Input from '@/components/Input';
 
 const LoginPage: NextPage = () => {
   return (
@@ -15,10 +16,16 @@ const LoginPage: NextPage = () => {
         </Link>
       </Header>
       <Form>
-        <div>아이디</div>
-        <TextInput type='text' />
-        <div>비밀번호</div>
-        <TextInput type='password' />
+        <IdInput
+          label='아이디'
+          type='password'
+          errorMessage='올바른 아이디 형식으로 입력해주세요'
+        />
+        <PasswordInput
+          label='비밀번호'
+          type='password'
+          errorMessage='올바른 비밀번호 형식으로 입력해주세요'
+        />
         <LoginButton disabled>로그인</LoginButton>
       </Form>
     </>
@@ -45,9 +52,11 @@ const Form = styled.div`
   padding: 0 20px 40px;
 `;
 
-const TextInput = styled.input`
-  border: 1px solid #000;
+const IdInput = styled(Input)`
+  margin-bottom: 16px;
 `;
+
+const PasswordInput = styled(Input)``;
 
 const LoginButton = styled.button`
   margin-top: 40px;
