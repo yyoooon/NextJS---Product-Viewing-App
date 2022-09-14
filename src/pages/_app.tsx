@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 import setupMSW from '../api/setup';
 import GlobalStyle from '../styles/GlobalStyle';

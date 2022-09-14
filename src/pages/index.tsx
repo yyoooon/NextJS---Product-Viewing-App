@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import type { NextPage } from 'next';
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
+import Input from '@/components/Input';
 
 const HomePage: NextPage = () => {
   return (
@@ -22,6 +23,7 @@ const HomePage: NextPage = () => {
           <StyledLink>infinite scroll</StyledLink>
         </Link>
       </Container>
+      <StyledInput label='비밀번호' type='password' errorMessage='유효한 값을 입력해주세요' />
     </>
   );
 };
@@ -33,6 +35,10 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+`;
+
+const StyledInput = styled(Input)`
+  background-color: red;
 `;
 
 const Title = styled.a`

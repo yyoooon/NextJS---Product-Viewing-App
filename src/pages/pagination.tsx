@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import type { NextPage } from 'next';
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 import products from '../api/data/products.json';
 import ProductList from '../components/ProductList';
