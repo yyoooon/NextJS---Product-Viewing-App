@@ -11,46 +11,48 @@ const INPUT_LENGTH = Object.keys(DEFAULT_VALUE).length;
 const LoginForm = () => {
   const [values, setValues] = useState(DEFAULT_VALUE);
   const [errorsState, setErrorsState] = useState(DEFAULT_VALUE);
-  const errors = useRef<ValuesType>({});
+  const errorsRef = useRef<ValuesType>({});
+  const errors = errorsRef.current;
 
   const handleFocusEvent = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name } = event.target;
-    setErrorsState({ ...errorsState, [name]: errors.current[name] });
+    setErrorsState({ ...errorsState, [name]: errors[name] });
   };
 
   const idValidate = (id: string) => {
     if (!vaildateId(id)) {
-      errors.current.id = '올바른 아이디 형식으로 입력해주세요.';
+      errors.id = '올바른 아이디 형식으로 입력해주세요.';
       return;
     }
-    errors.current.id = '';
+    errors.id = '';
     setErrorsState({ ...errorsState, id: '' });
   };
 
   const passwordValidate = (password: string) => {
     if (!vaildatePassword(password)) {
-      errors.current.password = '올바른 비밀번호 형식으로 입력해주세요.';
+      errors.password = '올바른 비밀번호 형식으로 입력해주세요.';
       return;
     }
-    errors.current.password = '';
+    errors.password = '';
     setErrorsState({ ...errorsState, password: '' });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setValues({ ...values, [name]: value.trim() });
+    const trimedValue = value.trim();
+    setValues({ ...values, [name]: trimedValue });
 
     if (name === 'id') {
-      idValidate(value.trim());
+      idValidate(trimedValue);
     }
 
     if (name === 'password') {
-      passwordValidate(value.trim());
+      passwordValidate(trimedValue);
     }
   };
 
   const checkLoginActive = () => {
-    const errorsLength = Object.keys(errors.current).length;
+    const errorsLength = Object.keys(errors).length;
 
     // 입력이 전부 안됐을 때
     if (errorsLength < INPUT_LENGTH) {
@@ -58,8 +60,8 @@ const LoginForm = () => {
     }
 
     // 입력이 됐지만 유효할 때
-    for (const key in errors.current) {
-      if (errors.current[key]) {
+    for (const key in errors) {
+      if (errors[key]) {
         return false;
       }
     }
