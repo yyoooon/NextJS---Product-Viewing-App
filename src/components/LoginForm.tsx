@@ -1,33 +1,55 @@
 import { Input } from '@/components';
 import styled from '@emotion/styled';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+
+type ErrorsType = { [key: string]: string } | null;
 
 const LoginForm = () => {
   const idInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
+  const [errors, setErrors] = useState<ErrorsType>(null);
 
-  const handleBlur = () => {
-    console.log(idInputRef.current?.value);
-    console.log(passwordInputRef.current?.value);
+  const handleBlur = (e: any) => {
+    const { name } = e.target;
+    // 유효하지 않은 경우 - 입력 값이 없을 떄 || 검사 리턴 값이 false일 떄
+    // setErrors({ ...errors, [name]: `유효하지 않은 ${name}입니다.` });
+
+    // 유효한 경우 - 입력 값이 있으면서 && 검사 리턴 값이 true일 때
+    setErrors({});
+  };
+
+  const handleSubmit = () => {
+    // 로그인 api 실행
+    // 성공 시
+    // 1. 받아온 값 전역으로 저장
+    // 2. home으로 이동
+    // 실패 시
+    // 1. 경고창 띄우기
+  };
+
+  const checkCanLogin = (errors: ErrorsType) => {
+    return errors && !Object.keys(errors).length ? true : false;
   };
 
   return (
     <Form>
       <IdInput
         ref={idInputRef}
+        name='id'
         label='아이디'
         type='text'
-        errorMessage='올바른 아이디 형식으로 입력해주세요'
+        errorMessage={errors?.id}
         onBlur={handleBlur}
       />
       <PasswordInput
         ref={passwordInputRef}
+        name='password'
         label='비밀번호'
         type='password'
-        errorMessage='올바른 비밀번호 형식으로 입력해주세요'
+        errorMessage={errors?.password}
         onBlur={handleBlur}
       />
-      <LoginButton disabled>로그인</LoginButton>
+      <LoginButton disabled={!checkCanLogin(errors)}>로그인</LoginButton>
     </Form>
   );
 };
