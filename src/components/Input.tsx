@@ -1,19 +1,23 @@
+/* eslint-disable react/display-name */
 import styled from '@emotion/styled';
+import { forwardRef } from 'react';
 
 interface InputProps extends React.ComponentProps<'input'> {
   label: string;
   errorMessage?: string;
 }
 
-const Input = ({ label, errorMessage, className, ...props }: InputProps) => {
-  return (
-    <Container className={className}>
-      <Label>{label}</Label>
-      <StyledInput vaild={errorMessage ? false : true} {...props} />
-      {errorMessage && <Text>{errorMessage}</Text>}
-    </Container>
-  );
-};
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, errorMessage, className, ...props }, ref) => {
+    return (
+      <Container className={className}>
+        <Label>{label}</Label>
+        <StyledInput ref={ref} vaild={errorMessage ? false : true} {...props} />
+        {errorMessage && <Text>{errorMessage}</Text>}
+      </Container>
+    );
+  }
+);
 
 export default Input;
 

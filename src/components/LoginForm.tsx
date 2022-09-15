@@ -1,14 +1,31 @@
 import { Input } from '@/components';
 import styled from '@emotion/styled';
+import { useRef } from 'react';
 
 const LoginForm = () => {
+  const idInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+
+  const handleBlur = () => {
+    console.log(idInputRef.current?.value);
+    console.log(passwordInputRef.current?.value);
+  };
+
   return (
     <Form>
-      <IdInput label='아이디' type='text' errorMessage='올바른 아이디 형식으로 입력해주세요' />
+      <IdInput
+        ref={idInputRef}
+        label='아이디'
+        type='text'
+        errorMessage='올바른 아이디 형식으로 입력해주세요'
+        onBlur={handleBlur}
+      />
       <PasswordInput
+        ref={passwordInputRef}
         label='비밀번호'
         type='password'
         errorMessage='올바른 비밀번호 형식으로 입력해주세요'
+        onBlur={handleBlur}
       />
       <LoginButton disabled>로그인</LoginButton>
     </Form>
