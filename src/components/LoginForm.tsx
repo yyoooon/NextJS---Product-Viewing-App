@@ -17,7 +17,7 @@ const LoginForm = ({ ...props }) => {
   };
 
   const removeMessageInErrors = (key: string) => {
-    errors[key] = '';
+    delete errors[key];
   };
 
   const renderErrorMessageToInput = (inputName: string, message: string) => {
@@ -29,7 +29,7 @@ const LoginForm = ({ ...props }) => {
   };
 
   const validateId = (name: string, value: string) => {
-    if (!testIdValidation(value)) {
+    if (value && !testIdValidation(value)) {
       putMessageInErrors(name, '올바른 아이디 형식으로 입력해주세요.');
       return;
     }
@@ -38,7 +38,7 @@ const LoginForm = ({ ...props }) => {
   };
 
   const validatePassword = (name: string, value: string) => {
-    if (!testPasswordValidation(value)) {
+    if (value && !testPasswordValidation(value)) {
       putMessageInErrors(name, '올바른 비밀번호 형식으로 입력해주세요.');
       return;
     }
@@ -76,12 +76,7 @@ const LoginForm = ({ ...props }) => {
   };
 
   const checkValidationAllInputValues = (errors: ValuesType) => {
-    for (const key in errors) {
-      if (errors[key]) {
-        return false;
-      }
-    }
-    return true;
+    return Object.keys(errors).length ? false : true;
   };
 
   const checkLoginActive = () => {
