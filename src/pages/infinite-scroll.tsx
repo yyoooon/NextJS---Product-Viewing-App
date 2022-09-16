@@ -4,7 +4,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 import products from '../api/data/products.json';
-import ProductList from '@/components/ProductList';
+import ProductList from '@/components/ProductList/ProductList';
 
 const InfiniteScrollPage: NextPage = () => {
   return (

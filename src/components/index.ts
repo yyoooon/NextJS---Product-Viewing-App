@@ -1,5 +1,5 @@
-export { default as Input } from './Input';
-export { default as LoginForm } from './LoginForm';
-export { default as Pagination } from './Pagination';
-export { default as ProductItem } from './ProductItem';
-export { default as ProductList } from './ProductList';
+export { default as Input } from './Input/Input';
+export { default as LoginForm } from './LoginForm/LoginForm';
+export { default as Pagination } from './Pagination/Pagination';
+export { default as ProductItem } from './ProductItem/ProductItem';
+export { default as ProductList } from './ProductList/ProductList';

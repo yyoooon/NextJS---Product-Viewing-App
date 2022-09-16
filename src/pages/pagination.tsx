@@ -5,8 +5,8 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 import products from '../api/data/products.json';
-import ProductList from '../components/ProductList';
-import Pagination from '../components/Pagination';
+import ProductList from '../components/ProductList/ProductList';
+import Pagination from '../components/Pagination/Pagination';
 
 const PaginationPage: NextPage = () => {
   const router = useRouter();

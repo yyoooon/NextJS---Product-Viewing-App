@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
-import { Product } from '../types/product';
-import ProductItem from './ProductItem';
+import { Product } from '../../types/product';
+import ProductItem from '../ProductItem/ProductItem';
 
 type ProductListProps = {
   products: Product[];
