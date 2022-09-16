@@ -1,10 +1,9 @@
 import { Input } from '@/components';
 import styled from '@emotion/styled';
 import React, { useRef, useState } from 'react';
-import { vaildateId, vaildatePassword } from '@/utilities/formValidate';
+import { testIdValidation, testPasswordValidation } from '@/utilities/formValidate';
 
 type ValuesType = { [key: string]: string };
-
 const DEFAULT_VALUE: ValuesType = { id: '', password: '' };
 const INPUT_LENGTH = Object.keys(DEFAULT_VALUE).length;
 
@@ -14,41 +13,58 @@ const LoginForm = () => {
   const errorsRef = useRef<ValuesType>({});
   const errors = errorsRef.current;
 
-  const handleFocusEvent = (event: React.FocusEvent<HTMLInputElement>) => {
-    const { name } = event.target;
-    setErrorsState({ ...errorsState, [name]: errors[name] });
+  const putMessageInErrors = (key: string, message: string) => {
+    errors[key] = message;
   };
 
-  const idValidate = (id: string) => {
-    if (!vaildateId(id)) {
-      errors.id = '올바른 아이디 형식으로 입력해주세요.';
-      return;
-    }
-    errors.id = '';
-    setErrorsState({ ...errorsState, id: '' });
+  const removeMessageInErrors = (key: string) => {
+    errors[key] = '';
   };
 
-  const passwordValidate = (password: string) => {
-    if (!vaildatePassword(password)) {
-      errors.password = '올바른 비밀번호 형식으로 입력해주세요.';
+  const renderErrorMessageToInput = (inputName: string, message: string) => {
+    setErrorsState({ ...errorsState, [inputName]: message });
+  };
+
+  const removeErrorMessageToInput = (inputName: string) => {
+    setErrorsState({ ...errorsState, [inputName]: '' });
+  };
+
+  const validateId = (id: string) => {
+    if (!testIdValidation(id)) {
+      putMessageInErrors(id, '올바른 아이디 형식으로 입력해주세요.');
       return;
     }
-    errors.password = '';
-    setErrorsState({ ...errorsState, password: '' });
+    removeMessageInErrors(id);
+    removeErrorMessageToInput(id);
+  };
+
+  const validatePassword = (password: string) => {
+    if (!testPasswordValidation(password)) {
+      putMessageInErrors(password, '올바른 비밀번호 형식으로 입력해주세요.');
+      return;
+    }
+    removeMessageInErrors(password);
+    removeErrorMessageToInput(password);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     const trimedValue = value.trim();
+
     setValues({ ...values, [name]: trimedValue });
 
     if (name === 'id') {
-      idValidate(trimedValue);
+      validateId(trimedValue);
     }
 
     if (name === 'password') {
-      passwordValidate(trimedValue);
+      validatePassword(trimedValue);
     }
+  };
+
+  const handleFocusEvent = (event: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = event.target;
+    renderErrorMessageToInput(name, errors[name]);
   };
 
   const checkLoginActive = () => {
