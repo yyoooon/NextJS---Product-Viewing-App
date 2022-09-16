@@ -1,5 +1,6 @@
-import { signIn } from '@/api/auth';
 import React, { useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useUser } from '@/hooks';
 import { testIdValidation, testPasswordValidation, errorMessage } from '@/utilities/formValidate';
 
 type ValuesType = { [key: string]: string };
@@ -8,6 +9,8 @@ type UseLoginFormArgType = {
 };
 
 const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
+  const { login } = useUser();
+  const router = useRouter();
   const [values, setValues] = useState(defaultValue);
   const [errorsState, setErrorsState] = useState(defaultValue);
   const errorsRef = useRef<ValuesType>({});
@@ -98,21 +101,14 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     return true;
   };
 
-  // 로그인 api 실행
-  // 성공 시
-  // - 받아온 값 리코일에 저장
-  // - 안내창 띄움
-  // - 홈으로 이동
-  // 실패 시
-  // - 경고창 띄움
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async () => {
     const { id, password } = values;
     try {
-      e.preventDefault();
-      const { data } = await signIn({ id, password });
-      console.log(data);
-    } catch (e: any) {
-      alert(e.message);
+      await login(id, password);
+      alert('로그인이 완료되었습니다!');
+      router.push('/');
+    } catch (error: any) {
+      alert(error.message);
     }
   };
 
