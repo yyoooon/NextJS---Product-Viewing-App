@@ -5,9 +5,8 @@ import { testIdValidation, testPasswordValidation } from '@/utilities/formValida
 
 type ValuesType = { [key: string]: string };
 const DEFAULT_VALUE: ValuesType = { id: '', password: '' };
-const INPUT_LENGTH = Object.keys(DEFAULT_VALUE).length;
 
-const LoginForm = () => {
+const LoginForm = ({ ...props }) => {
   const [values, setValues] = useState(DEFAULT_VALUE);
   const [errorsState, setErrorsState] = useState(DEFAULT_VALUE);
   const errorsRef = useRef<ValuesType>({});
@@ -29,22 +28,22 @@ const LoginForm = () => {
     setErrorsState({ ...errorsState, [inputName]: '' });
   };
 
-  const validateId = (id: string) => {
-    if (!testIdValidation(id)) {
-      putMessageInErrors(id, '올바른 아이디 형식으로 입력해주세요.');
+  const validateId = (name: string, value: string) => {
+    if (!testIdValidation(value)) {
+      putMessageInErrors(name, '올바른 아이디 형식으로 입력해주세요.');
       return;
     }
-    removeMessageInErrors(id);
-    removeErrorMessageToInput(id);
+    removeMessageInErrors(name);
+    removeErrorMessageToInput(name);
   };
 
-  const validatePassword = (password: string) => {
-    if (!testPasswordValidation(password)) {
-      putMessageInErrors(password, '올바른 비밀번호 형식으로 입력해주세요.');
+  const validatePassword = (name: string, value: string) => {
+    if (!testPasswordValidation(value)) {
+      putMessageInErrors(name, '올바른 비밀번호 형식으로 입력해주세요.');
       return;
     }
-    removeMessageInErrors(password);
-    removeErrorMessageToInput(password);
+    removeMessageInErrors(name);
+    removeErrorMessageToInput(name);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,11 +53,11 @@ const LoginForm = () => {
     setValues({ ...values, [name]: trimedValue });
 
     if (name === 'id') {
-      validateId(trimedValue);
+      validateId(name, value);
     }
 
     if (name === 'password') {
-      validatePassword(trimedValue);
+      validatePassword(name, value);
     }
   };
 
@@ -67,26 +66,41 @@ const LoginForm = () => {
     renderErrorMessageToInput(name, errors[name]);
   };
 
-  const checkLoginActive = () => {
-    const errorsLength = Object.keys(errors).length;
-
-    // 입력이 전부 안됐을 때
-    if (errorsLength < INPUT_LENGTH) {
-      return false;
+  const checkHaveAllInputValues = (values: ValuesType) => {
+    for (const key in values) {
+      if (!values[key]) {
+        return false;
+      }
     }
+    return true;
+  };
 
-    // 입력이 됐지만 유효할 때
+  const checkValidationAllInputValues = (errors: ValuesType) => {
     for (const key in errors) {
       if (errors[key]) {
         return false;
       }
+    }
+    return true;
+  };
+
+  const checkLoginActive = () => {
+    const isHaveAllInputValues = checkHaveAllInputValues(values);
+    const isValidateAllInputValues = checkValidationAllInputValues(errors);
+
+    if (!isHaveAllInputValues) {
+      return false;
+    }
+
+    if (!isValidateAllInputValues) {
+      return false;
     }
 
     return true;
   };
 
   return (
-    <Form>
+    <Form {...props}>
       <IdInput
         name='id'
         label='아이디'
@@ -105,7 +119,7 @@ const LoginForm = () => {
         onChange={handleChange}
         onBlur={handleFocusEvent}
       />
-      <LoginButton disabled={checkLoginActive() ? false : true}>로그인</LoginButton>
+      <LoginButton disabled={!checkLoginActive()}>로그인</LoginButton>
     </Form>
   );
 };
