@@ -6,9 +6,10 @@ import useLoginForm from './useLoginForm';
 const DEFAULT_VALUE = { id: '', password: '' };
 
 const LoginForm = ({ ...props }) => {
-  const { values, errorsState, handleChange, handleFocusEvent, checkLoginActive } = useLoginForm({
-    defaultValue: DEFAULT_VALUE,
-  });
+  const { values, errorsState, handleChange, handleFocusEvent, checkLoginActive, handleSubmit } =
+    useLoginForm({
+      defaultValue: DEFAULT_VALUE,
+    });
 
   return (
     <Form {...props}>
@@ -30,7 +31,9 @@ const LoginForm = ({ ...props }) => {
         onChange={handleChange}
         onBlur={handleFocusEvent}
       />
-      <LoginButton disabled={!checkLoginActive()}>로그인</LoginButton>
+      <LoginButton disabled={!checkLoginActive()} onClick={handleSubmit}>
+        로그인
+      </LoginButton>
     </Form>
   );
 };

@@ -1,3 +1,4 @@
+import { signIn } from '@/api/auth';
 import React, { useRef, useState } from 'react';
 import { testIdValidation, testPasswordValidation, errorMessage } from '@/utilities/formValidate';
 
@@ -97,7 +98,25 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     return true;
   };
 
-  return { values, errorsState, handleChange, handleFocusEvent, checkLoginActive };
+  // 로그인 api 실행
+  // 성공 시
+  // - 받아온 값 리코일에 저장
+  // - 안내창 띄움
+  // - 홈으로 이동
+  // 실패 시
+  // - 경고창 띄움
+  const handleSubmit = async (e: any) => {
+    const { id, password } = values;
+    try {
+      e.preventDefault();
+      const { data } = await signIn({ id, password });
+      console.log(data);
+    } catch (e: any) {
+      alert(e.message);
+    }
+  };
+
+  return { values, errorsState, handleChange, handleFocusEvent, handleSubmit, checkLoginActive };
 };
 
 export default useLoginForm;
