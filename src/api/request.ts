@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import { TOKEN_NAME } from '@/constants';
 
 const convertErrorResponse = (error: any) => {
   return {
@@ -11,7 +12,7 @@ const convertErrorResponse = (error: any) => {
 const setInterceptors = (instance: AxiosInstance) => {
   instance.interceptors.request.use(
     (config) => {
-      const TOKEN = localStorage.getItem('authorization');
+      const TOKEN = localStorage.getItem(TOKEN_NAME);
       if (!TOKEN) return config;
       config.headers = config.headers ? config.headers : {};
       config.headers.Authorization = `Bearer ${JSON.parse(TOKEN)}`;

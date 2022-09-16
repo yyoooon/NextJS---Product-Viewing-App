@@ -1,10 +1,7 @@
 import { request } from './request';
+import { UserLoginInfoType } from '@/types';
 
-interface UserLoginInfo {
-  [key: string]: string;
-}
-
-export const signIn = async ({ id, password }: UserLoginInfo) => {
+export const signIn = async ({ id, password }: UserLoginInfoType) => {
   const response = await request.post('/login', {
     id,
     password,
