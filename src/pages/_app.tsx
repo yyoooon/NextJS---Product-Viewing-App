@@ -4,16 +4,20 @@ import styled from '@emotion/styled';
 import setupMSW from '../api/setup';
 import GlobalStyle from '../styles/GlobalStyle';
 
+import { RecoilRoot } from 'recoil';
+
 setupMSW();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <GlobalStyle />
-      <Background />
-      <Content>
-        <Component {...pageProps} />
-      </Content>
+      <RecoilRoot>
+        <GlobalStyle />
+        <Background />
+        <Content>
+          <Component {...pageProps} />
+        </Content>
+      </RecoilRoot>
     </>
   );
 }
