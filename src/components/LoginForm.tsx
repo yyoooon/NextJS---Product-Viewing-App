@@ -1,7 +1,7 @@
 import { Input } from '@/components';
 import styled from '@emotion/styled';
 import React, { useRef, useState } from 'react';
-import { testIdValidation, testPasswordValidation } from '@/utilities/formValidate';
+import { testIdValidation, testPasswordValidation, errorMessage } from '@/utilities/formValidate';
 
 type ValuesType = { [key: string]: string };
 const DEFAULT_VALUE: ValuesType = { id: '', password: '' };
@@ -28,18 +28,17 @@ const LoginForm = ({ ...props }) => {
     setErrorsState({ ...errorsState, [inputName]: '' });
   };
 
-  const validateId = (name: string, value: string) => {
-    if (value && !testIdValidation(value)) {
-      putMessageInErrors(name, '올바른 아이디 형식으로 입력해주세요.');
-      return;
-    }
-    removeMessageInErrors(name);
-    removeErrorMessageToInput(name);
-  };
-
-  const validatePassword = (name: string, value: string) => {
-    if (value && !testPasswordValidation(value)) {
-      putMessageInErrors(name, '올바른 비밀번호 형식으로 입력해주세요.');
+  const validate = ({
+    name,
+    value,
+    validationTester,
+  }: {
+    name: string;
+    value: string;
+    validationTester: (value: string) => boolean;
+  }) => {
+    if (value && !validationTester(value)) {
+      putMessageInErrors(name, errorMessage[name]);
       return;
     }
     removeMessageInErrors(name);
@@ -53,11 +52,19 @@ const LoginForm = ({ ...props }) => {
     setValues({ ...values, [name]: trimedValue });
 
     if (name === 'id') {
-      validateId(name, value);
+      validate({
+        name,
+        value,
+        validationTester: testIdValidation,
+      });
     }
 
     if (name === 'password') {
-      validatePassword(name, value);
+      validate({
+        name,
+        value,
+        validationTester: testPasswordValidation,
+      });
     }
   };
 
@@ -80,14 +87,10 @@ const LoginForm = ({ ...props }) => {
   };
 
   const checkLoginActive = () => {
-    const isHaveAllInputValues = checkHaveAllInputValues(values);
-    const isValidateAllInputValues = checkValidationAllInputValues(errors);
-
-    if (!isHaveAllInputValues) {
+    if (!checkHaveAllInputValues(values)) {
       return false;
     }
-
-    if (!isValidateAllInputValues) {
+    if (!checkValidationAllInputValues(errors)) {
       return false;
     }
 
