@@ -11,11 +11,12 @@ const PaginationPage: NextPage = () => {
   const router = useRouter();
   const { page } = router.query;
 
+  console.log(products.length);
   return (
     <>
       <Container>
         <ProductList products={products.slice(0, 10)} />
-        <Pagination />
+        <Pagination totalPageLength={Math.round(products.length / 10)} pageLength={5} />
       </Container>
     </>
   );

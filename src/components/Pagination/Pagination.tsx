@@ -1,16 +1,37 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
 
-const Pagination = () => {
+type PaginationProps = {
+  totalPageLength: number;
+  pageLength: number;
+};
+
+function range(size: number, start: number) {
+  return Array(size)
+    .fill(start)
+    .map((x, y) => x + y);
+}
+
+const Pagination = ({ totalPageLength, pageLength }: PaginationProps) => {
+  const totalPageArrRef = useRef<number[]>(range(totalPageLength, 1));
+  const totalPageArr = totalPageArrRef.current;
+  const [startPageIndex, setStartPageIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pages, setPages] = useState<number[]>(totalPageArr.slice(startPageIndex, pageLength));
+
+  useEffect(() => {
+    setPages(totalPageArr.slice(startPageIndex, pageLength));
+  }, [pageLength, startPageIndex, totalPageArr]);
+
   return (
     <Container>
       <Button disabled>
         <VscChevronLeft />
       </Button>
       <PageWrapper>
-        {[1, 2, 3, 4, 5].map((page) => (
-          <Page key={page} selected={page === 1} disabled={page === 1}>
+        {pages.map((page) => (
+          <Page key={page} selected={page === currentPage} disabled={page === currentPage}>
             {page}
           </Page>
         ))}
