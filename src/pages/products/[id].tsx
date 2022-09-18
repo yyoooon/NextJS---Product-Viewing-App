@@ -10,14 +10,6 @@ const ProductDetailPage: NextPage = () => {
 
   return (
     <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
       <Thumbnail src={product.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'} />
       <ProductInfoWrapper>
         <Name>{product.name}</Name>
@@ -28,17 +20,6 @@ const ProductDetailPage: NextPage = () => {
 };
 
 export default ProductDetailPage;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
 
 const Thumbnail = styled.img`
   width: 100%;
