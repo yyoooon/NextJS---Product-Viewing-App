@@ -5,6 +5,7 @@ import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
 type PaginationProps = {
   totalPageLength: number;
   pageLength: number;
+  onChange: (currentPage: number) => void;
 };
 
 function range(size: number, start: number) {
@@ -20,23 +21,50 @@ const Pagination = ({ totalPageLength, pageLength }: PaginationProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pages, setPages] = useState<number[]>(totalPageArr.slice(startPageIndex, pageLength));
 
+  // TODO: useMemo, useCallback적용
+  const isFirst = startPageIndex <= 0;
+  const isLast = startPageIndex + pageLength > totalPageLength;
+
+  const handleClickLeft = () => {
+    if (isFirst) return;
+    setStartPageIndex((prev) => prev - pageLength);
+  };
+
+  const handleClickRight = () => {
+    if (isLast) return;
+    setStartPageIndex((prev) => prev + pageLength);
+  };
+
+  const handleClickPage = (event: any) => {
+    const { textContent } = event.target;
+    const selectedPage = Number(textContent);
+    setCurrentPage(Number(selectedPage));
+    // onChange(Number(selectedPage))
+  };
+
   useEffect(() => {
-    setPages(totalPageArr.slice(startPageIndex, pageLength));
+    setPages(totalPageArr.slice(startPageIndex, startPageIndex + pageLength));
+    setCurrentPage(startPageIndex + 1);
   }, [pageLength, startPageIndex, totalPageArr]);
 
   return (
     <Container>
-      <Button disabled>
+      <Button onClick={handleClickLeft} disabled={isFirst}>
         <VscChevronLeft />
       </Button>
       <PageWrapper>
         {pages.map((page) => (
-          <Page key={page} selected={page === currentPage} disabled={page === currentPage}>
+          <Page
+            key={page}
+            selected={page === currentPage}
+            disabled={page === currentPage}
+            onClick={handleClickPage}
+          >
             {page}
           </Page>
         ))}
       </PageWrapper>
-      <Button disabled={false}>
+      <Button onClick={handleClickRight} disabled={isLast}>
         <VscChevronRight />
       </Button>
     </Container>

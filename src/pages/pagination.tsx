@@ -7,16 +7,23 @@ import products from '../api/data/products.json';
 import ProductList from '../components/ProductList/ProductList';
 import Pagination from '../components/Pagination/Pagination';
 
+const CONTENTS_LENGTH = 10;
+
 const PaginationPage: NextPage = () => {
   const router = useRouter();
   const { page } = router.query;
 
-  console.log(products.length);
   return (
     <>
       <Container>
         <ProductList products={products.slice(0, 10)} />
-        <Pagination totalPageLength={Math.round(products.length / 10)} pageLength={5} />
+        <Pagination
+          totalPageLength={Math.round(products.length / CONTENTS_LENGTH)}
+          pageLength={5}
+          onChange={(currentPage) => {
+            console.log(currentPage);
+          }}
+        />
       </Container>
     </>
   );
