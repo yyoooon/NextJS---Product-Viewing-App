@@ -1,10 +1,10 @@
 import type { AppProps } from 'next/app';
 import styled from '@emotion/styled';
+import { RecoilRoot } from 'recoil';
 
 import setupMSW from '../api/setup';
 import GlobalStyle from '../styles/GlobalStyle';
-
-import { RecoilRoot } from 'recoil';
+import { Layout } from '@/components';
 
 setupMSW();
 
@@ -15,7 +15,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <GlobalStyle />
         <Background />
         <Content>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </Content>
       </RecoilRoot>
     </>

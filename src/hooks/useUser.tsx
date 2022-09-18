@@ -11,7 +11,7 @@ const useUser = () => {
     const { accessToken, user } = data.data;
 
     sessionStorage.setItem(TOKEN_NAME, JSON.stringify(accessToken));
-    setUserState({ id: user.id, name: user.name });
+    setUserState({ id: user.ID, name: user.NAME });
   };
 
   const logout = () => {
