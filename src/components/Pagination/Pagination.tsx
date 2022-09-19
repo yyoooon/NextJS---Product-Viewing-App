@@ -17,47 +17,43 @@ function range(size: number, start: number) {
 
 // TODO: 페이지 이동해 컨텐츠 수가 달라졌을 때의 스크롤 조절하기
 const Pagination = ({ totalPageLength, pageLength, onChange }: PaginationProps) => {
-  const totalPageArrRef = useRef<number[]>(range(totalPageLength, 1));
+  const totalPageArrRef = useRef<number[]>(range(totalPageLength + 1, 0));
   const totalPageArr = totalPageArrRef.current;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [startPageIndex, setStartPageIndex] = useState(0);
-  const [pages, setPages] = useState<number[]>(totalPageArr.slice(startPageIndex, pageLength));
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [firstPage, setfirstPage] = useState<number>(1);
+  const [pages, setPages] = useState<number[]>([]);
 
   // TODO: useMemo, useCallback적용
-  const isFirstStep = startPageIndex <= 0;
-  const isLastStep = startPageIndex + pageLength > totalPageLength;
-
-  const changePage = (newPage: number) => {
-    setCurrentPage(newPage);
-    onChange(newPage);
-  };
+  const isFirstStep = firstPage === 1;
+  const isLastStep = firstPage + pageLength > totalPageLength;
 
   const handleClickLeft = () => {
     if (isFirstStep) return;
-    const newStartPageIndex = startPageIndex - pageLength;
+    const newfirstPage = firstPage - pageLength;
 
-    setStartPageIndex(startPageIndex - pageLength);
-    changePage(Number(newStartPageIndex + 1));
+    setfirstPage(newfirstPage);
+    onChange(newfirstPage);
   };
 
   const handleClickRight = () => {
     if (isLastStep) return;
-    const newStartPageIndex = startPageIndex + pageLength;
+    const newfirstPage = firstPage + pageLength;
 
-    setStartPageIndex(newStartPageIndex);
-    changePage(Number(newStartPageIndex + 1));
+    setfirstPage(newfirstPage);
+    onChange(newfirstPage);
   };
 
   const handleClickPage = (event: any) => {
     const { textContent } = event.target;
     const selectedPage = Number(textContent);
-    changePage(selectedPage);
+    setCurrentPage(selectedPage);
+    onChange(selectedPage);
   };
 
   useEffect(() => {
-    setPages(totalPageArr.slice(startPageIndex, startPageIndex + pageLength));
-    setCurrentPage(startPageIndex + 1);
-  }, [pageLength, startPageIndex, totalPageArr]);
+    setPages(totalPageArr.slice(firstPage, firstPage + pageLength));
+    setCurrentPage(firstPage);
+  }, [pageLength, firstPage, totalPageArr]);
 
   return (
     <Container>
