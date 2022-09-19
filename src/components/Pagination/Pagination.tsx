@@ -55,6 +55,10 @@ const Pagination = ({ totalPageLength, pageLength, onChange }: PaginationProps) 
     firstPage.current = newFirstPage;
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
   return (
     <Container>
       <Button onClick={handleClickLeft} disabled={isFirstStep}>
