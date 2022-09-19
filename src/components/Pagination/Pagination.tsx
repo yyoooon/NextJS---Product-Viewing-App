@@ -8,38 +8,50 @@ type PaginationProps = {
   onChange: (currentPage: number) => void;
 };
 
+// TODO: util폴더로 이동
 function range(size: number, start: number) {
   return Array(size)
     .fill(start)
     .map((x, y) => x + y);
 }
 
-const Pagination = ({ totalPageLength, pageLength }: PaginationProps) => {
+// TODO: 페이지 이동해 컨텐츠 수가 달라졌을 때의 스크롤 조절하기
+const Pagination = ({ totalPageLength, pageLength, onChange }: PaginationProps) => {
   const totalPageArrRef = useRef<number[]>(range(totalPageLength, 1));
   const totalPageArr = totalPageArrRef.current;
-  const [startPageIndex, setStartPageIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [startPageIndex, setStartPageIndex] = useState(0);
   const [pages, setPages] = useState<number[]>(totalPageArr.slice(startPageIndex, pageLength));
 
   // TODO: useMemo, useCallback적용
-  const isFirst = startPageIndex <= 0;
-  const isLast = startPageIndex + pageLength > totalPageLength;
+  const isFirstStep = startPageIndex <= 0;
+  const isLastStep = startPageIndex + pageLength > totalPageLength;
+
+  const changePage = (newPage: number) => {
+    setCurrentPage(newPage);
+    onChange(newPage);
+  };
 
   const handleClickLeft = () => {
-    if (isFirst) return;
-    setStartPageIndex((prev) => prev - pageLength);
+    if (isFirstStep) return;
+    const newStartPageIndex = startPageIndex - pageLength;
+
+    setStartPageIndex(startPageIndex - pageLength);
+    changePage(Number(newStartPageIndex + 1));
   };
 
   const handleClickRight = () => {
-    if (isLast) return;
-    setStartPageIndex((prev) => prev + pageLength);
+    if (isLastStep) return;
+    const newStartPageIndex = startPageIndex + pageLength;
+
+    setStartPageIndex(newStartPageIndex);
+    changePage(Number(newStartPageIndex + 1));
   };
 
   const handleClickPage = (event: any) => {
     const { textContent } = event.target;
     const selectedPage = Number(textContent);
-    setCurrentPage(Number(selectedPage));
-    // onChange(Number(selectedPage))
+    changePage(selectedPage);
   };
 
   useEffect(() => {
@@ -49,7 +61,7 @@ const Pagination = ({ totalPageLength, pageLength }: PaginationProps) => {
 
   return (
     <Container>
-      <Button onClick={handleClickLeft} disabled={isFirst}>
+      <Button onClick={handleClickLeft} disabled={isFirstStep}>
         <VscChevronLeft />
       </Button>
       <PageWrapper>
@@ -64,7 +76,7 @@ const Pagination = ({ totalPageLength, pageLength }: PaginationProps) => {
           </Page>
         ))}
       </PageWrapper>
-      <Button onClick={handleClickRight} disabled={isLast}>
+      <Button onClick={handleClickRight} disabled={isLastStep}>
         <VscChevronRight />
       </Button>
     </Container>
