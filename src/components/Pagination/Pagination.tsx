@@ -15,45 +15,45 @@ function range(size: number, start: number) {
     .map((x, y) => x + y);
 }
 
-// TODO: 페이지 이동해 컨텐츠 수가 달라졌을 때의 스크롤 조절하기
 const Pagination = ({ totalPageLength, pageLength, onChange }: PaginationProps) => {
-  const totalPageArrRef = useRef<number[]>(range(totalPageLength + 1, 0));
-  const totalPageArr = totalPageArrRef.current;
+  const totalPageArr = useRef<number[]>(range(totalPageLength + 1, 0));
+  const firstPage = useRef<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [firstPage, setfirstPage] = useState<number>(1);
-  const [pages, setPages] = useState<number[]>([]);
+  const [pages, setPages] = useState<number[]>(range(pageLength, 1));
 
   // TODO: useMemo, useCallback적용
-  const isFirstStep = firstPage === 1;
-  const isLastStep = firstPage + pageLength > totalPageLength;
-
-  const handleClickLeft = () => {
-    if (isFirstStep) return;
-    const newfirstPage = firstPage - pageLength;
-
-    setfirstPage(newfirstPage);
-    onChange(newfirstPage);
-  };
-
-  const handleClickRight = () => {
-    if (isLastStep) return;
-    const newfirstPage = firstPage + pageLength;
-
-    setfirstPage(newfirstPage);
-    onChange(newfirstPage);
-  };
+  const isFirstStep = firstPage.current === 1;
+  const isLastStep = firstPage.current + pageLength > totalPageLength;
 
   const handleClickPage = (event: any) => {
     const { textContent } = event.target;
     const selectedPage = Number(textContent);
+
     setCurrentPage(selectedPage);
     onChange(selectedPage);
   };
 
-  useEffect(() => {
-    setPages(totalPageArr.slice(firstPage, firstPage + pageLength));
-    setCurrentPage(firstPage);
-  }, [pageLength, firstPage, totalPageArr]);
+  const handleClickLeft = () => {
+    if (isFirstStep) return;
+    const newFirstPage = firstPage.current - pageLength;
+
+    setPages(totalPageArr.current.slice(newFirstPage, newFirstPage + pageLength));
+    setCurrentPage(newFirstPage);
+    onChange(newFirstPage);
+
+    firstPage.current = newFirstPage;
+  };
+
+  const handleClickRight = () => {
+    if (isLastStep) return;
+    const newFirstPage = firstPage.current + pageLength;
+
+    setPages(totalPageArr.current.slice(newFirstPage, newFirstPage + pageLength));
+    setCurrentPage(newFirstPage);
+    onChange(newFirstPage);
+
+    firstPage.current = newFirstPage;
+  };
 
   return (
     <Container>
