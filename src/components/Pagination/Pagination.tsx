@@ -3,56 +3,63 @@ import styled from '@emotion/styled';
 import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
 
 type PaginationProps = {
-  totalPageLength: number;
-  pageLength: number;
+  currentPage?: number;
+  totalPageCount: number;
+  limitPageCount: number;
   onChange: (currentPage: number) => void;
 };
 
-// TODO: util폴더로 이동
-function range(size: number, start: number) {
+const range = (size: number, start: number) => {
   return Array(size)
     .fill(start)
     .map((x, y) => x + y);
-}
+};
 
-const Pagination = ({ totalPageLength, pageLength, onChange }: PaginationProps) => {
-  const totalPageArr = useRef<number[]>(range(totalPageLength + 1, 0));
-  const firstPage = useRef<number>(1);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pages, setPages] = useState<number[]>(range(pageLength, 1));
+const createPagesGroupList = (totalPageCount: number, limitPageCount: number) => {
+  const totalPagesGroupList = range(totalPageCount, 1);
+  const pagesGroupList = [];
+  for (let i = 0; i < totalPagesGroupList.length; i += limitPageCount) {
+    pagesGroupList.push(totalPagesGroupList.slice(i, i + limitPageCount));
+  }
+  return pagesGroupList;
+};
 
-  // TODO: useMemo, useCallback적용
-  const isFirstStep = firstPage.current === 1;
-  const isLastStep = firstPage.current + pageLength > totalPageLength;
+const Pagination = ({
+  currentPage = 1,
+  totalPageCount,
+  limitPageCount,
+  onChange,
+}: PaginationProps) => {
+  const pagesGroupList = useRef<number[][]>(createPagesGroupList(totalPageCount, limitPageCount));
+  const currentGroupIndex = useRef<number>(Math.floor(currentPage / limitPageCount));
+  const [pages, setPages] = useState<number[]>(pagesGroupList.current[currentGroupIndex.current]);
+
+  const isFirstGroup = currentGroupIndex.current === 0;
+  const isLastGroup = currentGroupIndex.current === pagesGroupList.current.length - 1;
 
   const handleClickPage = (event: any) => {
     const { textContent } = event.target;
     const selectedPage = Number(textContent);
 
-    setCurrentPage(selectedPage);
     onChange(selectedPage);
   };
 
   const handleClickLeft = () => {
-    if (isFirstStep) return;
-    const newFirstPage = firstPage.current - pageLength;
+    if (isFirstGroup) return;
 
-    setPages(totalPageArr.current.slice(newFirstPage, newFirstPage + pageLength));
-    setCurrentPage(newFirstPage);
-    onChange(newFirstPage);
+    currentGroupIndex.current -= 1;
 
-    firstPage.current = newFirstPage;
+    setPages(pagesGroupList.current[currentGroupIndex.current]);
+    onChange(pagesGroupList.current[currentGroupIndex.current][0]);
   };
 
   const handleClickRight = () => {
-    if (isLastStep) return;
-    const newFirstPage = firstPage.current + pageLength;
+    if (isLastGroup) return;
 
-    setPages(totalPageArr.current.slice(newFirstPage, newFirstPage + pageLength));
-    setCurrentPage(newFirstPage);
-    onChange(newFirstPage);
+    currentGroupIndex.current += 1;
 
-    firstPage.current = newFirstPage;
+    setPages(pagesGroupList.current[currentGroupIndex.current]);
+    onChange(pagesGroupList.current[currentGroupIndex.current][0]);
   };
 
   useEffect(() => {
@@ -61,7 +68,7 @@ const Pagination = ({ totalPageLength, pageLength, onChange }: PaginationProps) 
 
   return (
     <Container>
-      <Button onClick={handleClickLeft} disabled={isFirstStep}>
+      <Button onClick={handleClickLeft} disabled={isFirstGroup}>
         <VscChevronLeft />
       </Button>
       <PageWrapper>
@@ -76,7 +83,7 @@ const Pagination = ({ totalPageLength, pageLength, onChange }: PaginationProps) 
           </Page>
         ))}
       </PageWrapper>
-      <Button onClick={handleClickRight} disabled={isLastStep}>
+      <Button onClick={handleClickRight} disabled={isLastGroup}>
         <VscChevronRight />
       </Button>
     </Container>

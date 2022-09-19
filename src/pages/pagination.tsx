@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
@@ -12,11 +12,11 @@ import axios from 'axios';
 
 const CONTENTS_LENGTH = 10;
 
-type PaginationPageProps = {
-  data: Product[];
-};
+// type PaginationPageProps = {
+//   data: Product[];
+// };
 
-const PaginationPage: NextPage<PaginationPageProps> = ({ data }) => {
+const PaginationPage: NextPage = () => {
   const router = useRouter();
   const { page } = router.query;
   const [products, setProducts] = useState([]);
@@ -33,20 +33,23 @@ const PaginationPage: NextPage<PaginationPageProps> = ({ data }) => {
   };
 
   const handleChangePage = (page: number) => {
+    router.push(`pagination?page=${page}`, undefined, { shallow: true });
     fetchProducts(page);
   };
 
   useEffect(() => {
-    fetchProducts(1);
-  }, []);
+    if (!page) return;
+    fetchProducts(Number(page));
+  }, [page]);
 
   return (
     <>
       <Container>
         <ProductList products={products} />
         <Pagination
-          totalPageLength={Math.round(allProducts.length / CONTENTS_LENGTH)}
-          pageLength={5}
+          totalPageCount={Math.round(allProducts.length / CONTENTS_LENGTH)}
+          limitPageCount={5}
+          currentPage={Number(page) || 1}
           onChange={handleChangePage}
         />
       </Container>
@@ -54,12 +57,13 @@ const PaginationPage: NextPage<PaginationPageProps> = ({ data }) => {
   );
 };
 
-// export async function getServerSideProps() {
-//   const { data } = await axios.get(`http://localhost:3000/products?page=${1}&size=${10}`);
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { data } = await axios.get(
+//     `http://localhost:3000/products?page=${context.query.page}&size=${CONTENTS_LENGTH}`
+//   );
 //   const { products } = data.data;
-
 //   return { props: { data: products } };
-// }
+// };
 
 export default PaginationPage;
 
