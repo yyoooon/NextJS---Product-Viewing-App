@@ -39,7 +39,6 @@ const PaginationPage: NextPage<PaginationPageProps> = () => {
 
   const handleChangePage = (page: number) => {
     router.push(`pagination?page=${page}`, undefined, { shallow: true });
-    fetchProducts(page);
   };
 
   useEffect(() => {
