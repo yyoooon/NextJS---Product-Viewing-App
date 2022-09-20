@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import { Product } from '../../types/product';
 
@@ -12,7 +13,12 @@ const ProductItem = ({ product: { id, name, thumbnail, price } }: ProductItemPro
   return (
     <Link key={id} href={`/products/${id}`}>
       <Container>
-        <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
+        <Image
+          src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'}
+          alt='Picture of the author'
+          width={180}
+          height={180}
+        />
         <Name>{name}</Name>
         <Price>{price.toLocaleString('ko-KR')}</Price>
       </Container>
@@ -26,11 +32,6 @@ const Container = styled.div`
   width: 180px;
   margin-left: 20px;
   margin-top: 20px;
-`;
-
-const Thumbnail = styled.img`
-  width: 100%;
-  height: 180px;
 `;
 
 const Name = styled.h2`
