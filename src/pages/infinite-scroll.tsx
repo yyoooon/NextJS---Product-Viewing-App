@@ -1,35 +1,47 @@
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from '@emotion/styled';
 
-import products from '../api/data/products.json';
+import allProducts from '../api/data/products.json';
 import ProductList from '@/components/ProductList/ProductList';
+import { getProducts } from '@/api/product';
+import { useIntersect } from '@/hooks';
+import { Product } from '@/types';
+
+const PRODUCTS_LENGTH = 16;
 
 const InfiniteScrollPage: NextPage = () => {
-  const [target, setTarget] = useState<HTMLElement | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const currentPage = useRef(1);
 
-  const onIntersect: IntersectionObserverCallback = ([entry], observer) => {
-    if (entry.isIntersecting) {
-      observer.unobserve(entry.target);
-      // 데이터 불러오는 로직 작성
+  const fetchProducts = async (page: number) => {
+    setIsLoading(true);
+    try {
+      const { data } = await getProducts(page, PRODUCTS_LENGTH);
+      const { products } = data.data;
+      setProducts((prev) => [...prev, ...products]);
+    } catch (error: any) {
+      alert(error.message);
     }
+    setIsLoading(false);
   };
 
-  useEffect(() => {
-    if (!target) return;
-
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
-    observer.observe(target);
-
-    return () => observer.disconnect();
-  }, [target]);
+  const ref = useIntersect(async (entry, observer) => {
+    observer.unobserve(entry.target);
+    const isLastPage = allProducts.length === products.length;
+    if (!isLastPage && !isLoading) {
+      fetchProducts(currentPage.current);
+      currentPage.current++;
+    }
+  });
 
   return (
     <>
       <Container>
         <ProductList products={products} />
+        <div ref={ref}>{isLoading ? '로딩 중입니다' : ''}</div>
       </Container>
-      <div ref={setTarget}></div>
     </>
   );
 };
