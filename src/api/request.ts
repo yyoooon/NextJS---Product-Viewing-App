@@ -4,7 +4,7 @@ import { TOKEN_NAME } from '@/constants';
 const convertErrorResponse = (error: any) => {
   return {
     status: error.response.status,
-    message: error.response.data.message,
+    message: error.response.data.error.message,
     data: error.response.data,
   };
 };

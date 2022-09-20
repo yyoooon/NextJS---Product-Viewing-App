@@ -1,24 +1,28 @@
 import type { AppProps } from 'next/app';
 import styled from '@emotion/styled';
 import { RecoilRoot } from 'recoil';
+import { QueryClientProvider, QueryClient } from 'react-query';
 
 import setupMSW from '../api/setup';
 import GlobalStyle from '../styles/GlobalStyle';
 import { Layout } from '@/components';
 
 setupMSW();
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <RecoilRoot>
-        <GlobalStyle />
-        <Background />
-        <Content>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </Content>
+        <QueryClientProvider client={queryClient}>
+          <GlobalStyle />
+          <Background />
+          <Content>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Content>
+        </QueryClientProvider>
       </RecoilRoot>
     </>
   );

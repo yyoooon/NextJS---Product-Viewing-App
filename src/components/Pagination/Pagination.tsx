@@ -1,21 +1,41 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
+import { usePagination } from '@/hooks';
 
-const Pagination = () => {
+type PaginationProps = {
+  currentPage?: number;
+  totalPageCount: number;
+  limitPageCount: number;
+  onChange: (currentPage: number) => void;
+};
+
+const Pagination = ({
+  currentPage = 1,
+  totalPageCount,
+  limitPageCount,
+  onChange,
+}: PaginationProps) => {
+  const { pages, isFirstGroup, isLastGroup, handleClickPage, handleClickLeft, handleClickRight } =
+    usePagination({ totalPageCount, limitPageCount, currentPage, onChange });
   return (
     <Container>
-      <Button disabled>
+      <Button onClick={handleClickLeft} disabled={isFirstGroup}>
         <VscChevronLeft />
       </Button>
       <PageWrapper>
-        {[1, 2, 3, 4, 5].map((page) => (
-          <Page key={page} selected={page === 1} disabled={page === 1}>
+        {pages.map((page) => (
+          <Page
+            key={page}
+            selected={page === currentPage}
+            disabled={page === currentPage}
+            onClick={handleClickPage}
+          >
             {page}
           </Page>
         ))}
       </PageWrapper>
-      <Button disabled={false}>
+      <Button onClick={handleClickRight} disabled={isLastGroup}>
         <VscChevronRight />
       </Button>
     </Container>
