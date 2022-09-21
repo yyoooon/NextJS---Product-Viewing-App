@@ -64,10 +64,6 @@ const usePagination = ({
     onChange(pagesGroupList.current[currentGroupIndex.current][0]);
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [currentPage]);
-
   return { pages, handleClickPage, handleClickLeft, handleClickRight, isFirstGroup, isLastGroup };
 };
 
