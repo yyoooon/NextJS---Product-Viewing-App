@@ -1,11 +1,10 @@
 import { useRouter } from 'next/router';
-import type { GetServerSideProps, NextPage } from 'next';
+import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 import allProducts from '../api/data/products.json';
-import ProductList from '../components/ProductList/ProductList';
-import Pagination from '../components/Pagination/Pagination';
+import { ProductList, Pagination, MessageContainer } from '@/components';
 import { getProducts } from '@/api/product';
 import { Product } from '@/types';
 
@@ -64,10 +63,10 @@ const PaginationPage: NextPage<PaginationPageProps> = () => {
               />
             </>
           ) : (
-            <span>로딩 중입니다.</span>
+            <MessageContainer>로딩 중입니다.</MessageContainer>
           )
         ) : (
-          <span>존재하지 않는 페이지입니다.</span>
+          <MessageContainer>존재하지 않는 페이지입니다.</MessageContainer>
         )}
       </Container>
     </>

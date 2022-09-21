@@ -1,11 +1,10 @@
-import Link from 'next/link';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
+import { MessageContainer } from '@/components';
 import { getProduct } from '@/api/product';
-import { useRouter } from 'next/router';
-
 import { Product } from '@/types';
 
 const ProductDetailPage: NextPage = () => {
@@ -46,10 +45,10 @@ const ProductDetailPage: NextPage = () => {
         </ProductInfoWrapper>
       </>
     ) : (
-      <span>로딩 중입니다.</span>
+      <MessageContainer>로딩 중입니다.</MessageContainer>
     )
   ) : (
-    <span>존재하지 않는 상품입니다.</span>
+    <MessageContainer>존재하지 않는 상품입니다.</MessageContainer>
   );
 };
 
