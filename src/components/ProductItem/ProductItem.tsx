@@ -21,7 +21,7 @@ const ProductItem = ({ product: { id, name, thumbnail, price }, onClick }: Produ
       <Container onClick={handleClick}>
         <Image
           src={thumbnail || '/defaultThumbnail.jpg'}
-          alt='Picture of the author'
+          alt={`${name}상품 썸네일 이미지`}
           width={180}
           height={180}
         />

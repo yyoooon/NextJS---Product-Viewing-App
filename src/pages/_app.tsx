@@ -16,6 +16,7 @@ const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
+  // 페이지 이동 시 전 페이지 경로 저장
   const storePath = () => {
     const storage = globalThis?.sessionStorage;
     if (!storage) return;
