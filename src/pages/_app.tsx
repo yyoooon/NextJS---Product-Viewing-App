@@ -25,7 +25,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   };
 
   useEffect(() => storePathValues, [router.asPath]);
-  // 새로 고침 때에는 렌더링이 다 되고 경로가 바뀐다
 
   return (
     <>
