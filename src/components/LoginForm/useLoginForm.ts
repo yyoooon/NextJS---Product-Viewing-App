@@ -9,18 +9,20 @@ type UseLoginFormArgType = {
 };
 
 const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
-  const { login } = useUser();
   const router = useRouter();
+  const { login } = useUser();
+
   const [values, setValues] = useState(defaultValue);
   const [errorsState, setErrorsState] = useState(defaultValue);
+
   const errorsRef = useRef<ValuesType>({});
   const errors = errorsRef.current;
 
-  const putMessageInErrors = (key: string, message: string) => {
+  const saveMessageInErrorsRef = (key: string, message: string) => {
     errors[key] = message;
   };
 
-  const removeMessageInErrors = (key: string) => {
+  const removeMessageInErrorsRef = (key: string) => {
     delete errors[key];
   };
 
@@ -32,20 +34,19 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     setErrorsState({ ...errorsState, [inputName]: '' });
   };
 
-  const validate = ({
-    name,
-    value,
-    validationTester,
-  }: {
+  type Validate = {
     name: string;
     value: string;
     validationTester: (value: string) => boolean;
-  }) => {
+  };
+
+  // 유효성 검사 후 에러 메세지 저장/렌더링
+  const validate = ({ name, value, validationTester }: Validate) => {
     if (value && !validationTester(value)) {
-      putMessageInErrors(name, errorMessage[name]);
+      saveMessageInErrorsRef(name, errorMessage[name]);
       return;
     }
-    removeMessageInErrors(name);
+    removeMessageInErrorsRef(name);
     removeErrorMessageToInput(name);
   };
 
@@ -72,7 +73,7 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     }
   };
 
-  const handleFocusEvent = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocusOut = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name } = event.target;
     renderErrorMessageToInput(name, errors[name]);
   };
@@ -97,7 +98,6 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     if (!checkValidationAllInputValues(errors)) {
       return false;
     }
-
     return true;
   };
 
@@ -113,7 +113,7 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     }
   };
 
-  return { values, errorsState, handleChange, handleFocusEvent, handleSubmit, checkLoginActive };
+  return { values, errorsState, handleChange, handleFocusOut, handleSubmit, checkLoginActive };
 };
 
 export default useLoginForm;
