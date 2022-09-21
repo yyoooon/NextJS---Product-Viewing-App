@@ -12,7 +12,7 @@ const LoginForm = ({ ...props }) => {
     });
 
   return (
-    <Form {...props}>
+    <Form {...props} onSubmit={handleSubmit}>
       <IdInput
         name='id'
         label='아이디'
@@ -30,17 +30,16 @@ const LoginForm = ({ ...props }) => {
         errorMessage={errorsState?.password}
         onChange={handleChange}
         onBlur={handleFocusEvent}
+        autoComplete='on'
       />
-      <LoginButton disabled={!checkLoginActive()} onClick={handleSubmit}>
-        로그인
-      </LoginButton>
+      <LoginButton disabled={!checkLoginActive()}>로그인</LoginButton>
     </Form>
   );
 };
 
 export default LoginForm;
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 40px;
