@@ -7,10 +7,26 @@ import setupMSW from '../api/setup';
 import GlobalStyle from '../styles/GlobalStyle';
 import { Layout } from '@/components';
 
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
 setupMSW();
 const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
+  // 페이지 이동 시 전 페이지 경로 저장
+  const storePath = () => {
+    const storage = globalThis?.sessionStorage;
+    if (!storage) return;
+    const prevPath = storage.getItem('currentPath');
+    storage.setItem('prevPath', prevPath || '');
+    storage.setItem('currentPath', globalThis.location.pathname);
+  };
+
+  useEffect(() => storePath, [router.asPath]);
+
   return (
     <>
       <RecoilRoot>

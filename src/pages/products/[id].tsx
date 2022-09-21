@@ -38,7 +38,10 @@ const ProductDetailPage: NextPage = () => {
   return !isNotFoundPage ? (
     !isLoading ? (
       <>
-        <Thumbnail src={product?.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'} />
+        <Thumbnail
+          src={product?.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'}
+          alt={`${product?.name}상품 사진`}
+        />
         <ProductInfoWrapper>
           <Name>{product?.name}</Name>
           <Price>{product?.price.toLocaleString('ko-KR')}원</Price>

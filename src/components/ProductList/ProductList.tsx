@@ -1,19 +1,26 @@
 import styled from '@emotion/styled';
 
-import { Product } from '../../types/product';
-import ProductItem from '../ProductItem/ProductItem';
+import { Product } from '@/types';
+import { ProductItem } from '@/components';
 
 type ProductListProps = {
   products: Product[];
+  onClick?: (e: React.MouseEvent) => void;
 };
 
-const ProductList = ({ products }: ProductListProps) => (
-  <Container>
-    {products.map((product) => (
-      <ProductItem key={product.id} product={product} />
-    ))}
-  </Container>
-);
+const ProductList = ({ products, onClick }: ProductListProps) => {
+  const handleClick = (e: React.MouseEvent) => {
+    onClick && onClick(e);
+  };
+
+  return (
+    <Container>
+      {products.map((product) => (
+        <ProductItem key={product.id} product={product} onClick={handleClick} />
+      ))}
+    </Container>
+  );
+};
 
 export default ProductList;
 

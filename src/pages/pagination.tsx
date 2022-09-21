@@ -10,14 +10,10 @@ import { Product } from '@/types';
 
 const CONTENTS_LENGTH = 10;
 
-type PaginationPageProps = {
-  data: Product[];
-};
-
-const PaginationPage: NextPage<PaginationPageProps> = () => {
+const PaginationPage: NextPage = () => {
   const router = useRouter();
   const { page } = router.query;
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isNotFoundPage, setIsNotFoundPage] = useState(false);
@@ -39,7 +35,7 @@ const PaginationPage: NextPage<PaginationPageProps> = () => {
   };
 
   const handleChangePage = (page: number) => {
-    router.push(`pagination?page=${page}`, undefined, { shallow: true });
+    router.push(`pagination?page=${page}`, undefined, { shallow: true, scroll: true });
   };
 
   useEffect(() => {
