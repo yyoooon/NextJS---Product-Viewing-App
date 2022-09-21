@@ -16,11 +16,11 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
   const errorsRef = useRef<ValuesType>({});
   const errors = errorsRef.current;
 
-  const putMessageInErrors = (key: string, message: string) => {
+  const saveMessageInErrorsRef = (key: string, message: string) => {
     errors[key] = message;
   };
 
-  const removeMessageInErrors = (key: string) => {
+  const removeMessageInErrorsRef = (key: string) => {
     delete errors[key];
   };
 
@@ -32,6 +32,7 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     setErrorsState({ ...errorsState, [inputName]: '' });
   };
 
+  // 유효성 검사 후 에러 메세지 저장/렌더링
   const validate = ({
     name,
     value,
@@ -42,10 +43,10 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     validationTester: (value: string) => boolean;
   }) => {
     if (value && !validationTester(value)) {
-      putMessageInErrors(name, errorMessage[name]);
+      saveMessageInErrorsRef(name, errorMessage[name]);
       return;
     }
-    removeMessageInErrors(name);
+    removeMessageInErrorsRef(name);
     removeErrorMessageToInput(name);
   };
 
@@ -72,7 +73,7 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     }
   };
 
-  const handleFocusEvent = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocusOut = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name } = event.target;
     renderErrorMessageToInput(name, errors[name]);
   };
@@ -113,7 +114,7 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     }
   };
 
-  return { values, errorsState, handleChange, handleFocusEvent, handleSubmit, checkLoginActive };
+  return { values, errorsState, handleChange, handleFocusOut, handleSubmit, checkLoginActive };
 };
 
 export default useLoginForm;

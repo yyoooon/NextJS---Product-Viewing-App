@@ -6,7 +6,7 @@ import useLoginForm from './useLoginForm';
 const DEFAULT_VALUE = { id: '', password: '' };
 
 const LoginForm = ({ ...props }) => {
-  const { values, errorsState, handleChange, handleFocusEvent, checkLoginActive, handleSubmit } =
+  const { values, errorsState, handleChange, handleFocusOut, checkLoginActive, handleSubmit } =
     useLoginForm({
       defaultValue: DEFAULT_VALUE,
     });
@@ -20,7 +20,7 @@ const LoginForm = ({ ...props }) => {
         value={values.id}
         errorMessage={errorsState?.id}
         onChange={handleChange}
-        onBlur={handleFocusEvent}
+        onBlur={handleFocusOut}
       />
       <PasswordInput
         name='password'
@@ -29,7 +29,7 @@ const LoginForm = ({ ...props }) => {
         value={values.password}
         errorMessage={errorsState?.password}
         onChange={handleChange}
-        onBlur={handleFocusEvent}
+        onBlur={handleFocusOut}
         autoComplete='on'
       />
       <LoginButton disabled={!checkLoginActive()}>로그인</LoginButton>
