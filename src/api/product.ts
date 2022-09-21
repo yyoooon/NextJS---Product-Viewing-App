@@ -7,3 +7,9 @@ export const getProducts = async (page: number, size: number) => {
 
   return response;
 };
+
+export const getProduct = async (id: string | string[]) => {
+  const response = await request.get(`/products/${id}`);
+
+  return response;
+};
