@@ -12,8 +12,16 @@ const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
-    userInfo && setIsLogin(true);
+    if (userInfo) {
+      setIsLogin(true);
+      return;
+    }
+    setIsLogin(false);
   }, [userInfo]);
+
+  const handleClickLogout = () => {
+    logout();
+  };
 
   return (
     <StyledHeader>
@@ -24,13 +32,7 @@ const Header = () => {
       {isLogin ? (
         <InfoBox>
           <strong>{userInfo?.name}</strong>
-          <span
-            onClick={() => {
-              logout();
-            }}
-          >
-            logout
-          </span>
+          <span onClick={handleClickLogout}>logout</span>
         </InfoBox>
       ) : (
         <InfoBox>
