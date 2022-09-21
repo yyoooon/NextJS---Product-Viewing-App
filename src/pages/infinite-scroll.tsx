@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 
 import allProducts from '../api/data/products.json';
@@ -14,6 +14,7 @@ const InfiniteScrollPage: NextPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const currentPage = useRef(1);
+  const [canScrollMove, setCanScrollMove] = useState(false);
 
   const fetchProducts = async (page: number) => {
     setIsLoading(true);
@@ -36,10 +37,36 @@ const InfiniteScrollPage: NextPage = () => {
     }
   });
 
+  const handleClickProduct = () => {
+    sessionStorage.setItem('PRODUCTS', JSON.stringify(products));
+    sessionStorage.setItem('SCROLL_HEIGHT', `${window.scrollY}`);
+    sessionStorage.setItem('CURRENT_PAGE', `${currentPage.current}`);
+  };
+
+  useEffect(() => {
+    const prevPath = sessionStorage.getItem('prevPath')?.split('/')[1];
+    if (prevPath !== 'products') return;
+
+    const savedProducts = sessionStorage.getItem('PRODUCTS');
+    const savedCurrentPage = sessionStorage.getItem('CURRENT_PAGE');
+    if (!savedProducts || !savedCurrentPage) return;
+
+    setProducts(JSON.parse(savedProducts));
+    currentPage.current = Number(savedCurrentPage);
+    setCanScrollMove(true);
+  }, []);
+
+  useEffect(() => {
+    const savedScroll = sessionStorage.getItem('SCROLL_HEIGHT');
+    if (!canScrollMove || !savedScroll) return;
+
+    window.scrollTo(0, Number(savedScroll));
+  }, [canScrollMove]);
+
   return (
     <>
       <Container>
-        <ProductList products={products} />
+        <ProductList products={products} onClick={handleClickProduct} />
         <div ref={ref}>{isLoading ? '로딩 중입니다' : ''}</div>
       </Container>
     </>
