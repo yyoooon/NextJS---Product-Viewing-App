@@ -25,7 +25,7 @@ const createPagesGroupList = (totalPageCount: number, limitPageCount: number) =>
 
 // 현재 페이지가 속한 그룹의 index를 구함
 const getCurrentGroupIndex = (currentPage: number, limitPageCount: number) => {
-  return Math.floor(currentPage / limitPageCount);
+  return Math.ceil(currentPage / limitPageCount) - 1;
 };
 
 // hook 시작
