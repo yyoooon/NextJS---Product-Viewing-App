@@ -20,7 +20,11 @@ const Header = () => {
   }, [userInfo]);
 
   const handleClickLogout = () => {
-    logout();
+    if (confirm('로그아웃 하시겠습니까?') == true) {
+      logout();
+    } else {
+      return;
+    }
   };
 
   return (
