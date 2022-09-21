@@ -1,4 +1,4 @@
-import { Input } from '@/components';
+import Input from './Input';
 import styled from '@emotion/styled';
 import React from 'react';
 import useLoginForm from './useLoginForm';

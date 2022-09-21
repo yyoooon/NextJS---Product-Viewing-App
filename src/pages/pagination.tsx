@@ -1,14 +1,12 @@
 import { useRouter } from 'next/router';
-import type { GetServerSideProps, NextPage } from 'next';
+import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 import allProducts from '../api/data/products.json';
-import ProductList from '../components/ProductList/ProductList';
-import Pagination from '../components/Pagination/Pagination';
+import { ProductList, Pagination, MessageContainer } from '@/components';
 import { getProducts } from '@/api/product';
 import { Product } from '@/types';
-import axios from 'axios';
 
 const CONTENTS_LENGTH = 10;
 
@@ -21,9 +19,11 @@ const PaginationPage: NextPage<PaginationPageProps> = () => {
   const { page } = router.query;
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [isNotFoundPage, setIsNotFoundPage] = useState(false);
 
   const fetchProducts = async (page: number) => {
+    setIsLoading(true);
     try {
       const { data } = await getProducts(page, CONTENTS_LENGTH);
       const { products } = data.data;
@@ -35,6 +35,7 @@ const PaginationPage: NextPage<PaginationPageProps> = () => {
       }
       alert(error.message);
     }
+    setIsLoading(false);
   };
 
   const handleChangePage = (page: number) => {
@@ -51,37 +52,26 @@ const PaginationPage: NextPage<PaginationPageProps> = () => {
     <>
       <Container>
         {!isNotFoundPage ? (
-          <>
-            <ProductList products={products} />
-            <Pagination
-              totalPageCount={Math.round(allProducts.length / CONTENTS_LENGTH)}
-              limitPageCount={5}
-              currentPage={currentPage}
-              onChange={handleChangePage}
-            />
-          </>
+          !isLoading ? (
+            <>
+              <ProductList products={products} />
+              <Pagination
+                totalPageCount={Math.round(allProducts.length / CONTENTS_LENGTH)}
+                limitPageCount={5}
+                currentPage={currentPage}
+                onChange={handleChangePage}
+              />
+            </>
+          ) : (
+            <MessageContainer>로딩 중입니다.</MessageContainer>
+          )
         ) : (
-          <span>존재하지 않는 페이지입니다.</span>
+          <MessageContainer>존재하지 않는 페이지입니다.</MessageContainer>
         )}
       </Container>
     </>
   );
 };
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   try {
-//     const { data } = await axios.get(`/products`, {
-//       params: { page: context.query.page, size: CONTENTS_LENGTH },
-//     });
-//     console.log(data);
-//     return { props: { data: data.data.products } };
-//   } catch (err) {
-//     console.log(err);
-//     return {
-//       props: { data: [] },
-//     };
-//   }
-// };
 
 export default PaginationPage;
 
