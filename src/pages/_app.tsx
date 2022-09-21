@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  const storePathValues = () => {
+  const storePath = () => {
     const storage = globalThis?.sessionStorage;
     if (!storage) return;
     const prevPath = storage.getItem('currentPath');
@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     storage.setItem('currentPath', globalThis.location.pathname);
   };
 
-  useEffect(() => storePathValues, [router.asPath]);
+  useEffect(() => storePath, [router.asPath]);
 
   return (
     <>

@@ -17,9 +17,7 @@ const ProductList = ({ products, onClick }: ProductListProps) => {
   return (
     <Container>
       {products.map((product) => (
-        <Link key={product.id} href={`/products/${product.id}`}>
-          <ProductItem key={product.id} product={product} onClick={handleClick} />
-        </Link>
+        <ProductItem key={product.id} product={product} onClick={handleClick} />
       ))}
     </Container>
   );

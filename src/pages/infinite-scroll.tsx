@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 
 import allProducts from '../api/data/products.json';
-import ProductList from '@/components/ProductList/ProductList';
+import { ProductList } from '@/components';
 import { getProducts } from '@/api/product';
 import { useIntersect } from '@/hooks';
 import { Product } from '@/types';
@@ -13,8 +13,8 @@ const PRODUCTS_LENGTH = 16;
 const InfiniteScrollPage: NextPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isScrollable, setIsScrollable] = useState(false);
   const currentPage = useRef(1);
-  const [canScrollMove, setCanScrollMove] = useState(false);
 
   const fetchProducts = async (page: number) => {
     setIsLoading(true);
@@ -37,6 +37,7 @@ const InfiniteScrollPage: NextPage = () => {
     }
   });
 
+  // 상품 클릭 시 현재의 데이터와 스크롤 위치를 저장
   const handleClickProduct = () => {
     sessionStorage.setItem('PRODUCTS', JSON.stringify(products));
     sessionStorage.setItem('SCROLL_HEIGHT', `${window.scrollY}`);
@@ -56,17 +57,19 @@ const InfiniteScrollPage: NextPage = () => {
     currentPage.current = Number(savedCurrentPage);
   };
 
+  // 이전 페이지가 상품 페이지일 경우 세션 스토리지에 저장된 데이터로 초기화
   useEffect(() => {
     if (!checkPrevPageIsProduct()) return;
     setStoredData();
-    setCanScrollMove(true);
+    setIsScrollable(true);
   }, []);
 
+  // 위의 로직이 실행 되어 리스트가 렌더링 되면 저장된 스크롤 위치로 이동
   useEffect(() => {
     const savedScroll = sessionStorage.getItem('SCROLL_HEIGHT');
-    if (!canScrollMove || !savedScroll) return;
+    if (!isScrollable || !savedScroll) return;
     window.scrollTo(0, Number(savedScroll));
-  }, [canScrollMove]);
+  }, [isScrollable]);
 
   return (
     <>

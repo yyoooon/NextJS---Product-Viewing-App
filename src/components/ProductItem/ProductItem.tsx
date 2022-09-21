@@ -1,30 +1,34 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import Image from 'next/image';
 
-import { Product } from '../../types/product';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { Product } from '@/types/product';
 
 type ProductItemProps = {
   product: Product;
   onClick?: (e: React.MouseEvent) => void;
 };
 
-const ProductItem = ({ product: { name, thumbnail, price }, onClick }: ProductItemProps) => {
+const ProductItem = ({ product: { id, name, thumbnail, price }, onClick }: ProductItemProps) => {
   const handleClick = (e: React.MouseEvent) => {
     onClick && onClick(e);
   };
 
   return (
-    <Container onClick={handleClick}>
-      <Image
-        src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'}
-        alt='Picture of the author'
-        width={180}
-        height={180}
-      />
-      <Name>{name}</Name>
-      <Price>{price.toLocaleString('ko-KR')}</Price>
-    </Container>
+    <Link key={id} href={`/products/${id}`}>
+      <Container onClick={handleClick}>
+        <Image
+          src={thumbnail || '/defaultThumbnail.jpg'}
+          alt='Picture of the author'
+          width={180}
+          height={180}
+        />
+        <Name>{name}</Name>
+        <Price>{price.toLocaleString('ko-KR')}</Price>
+      </Container>
+    </Link>
   );
 };
 
