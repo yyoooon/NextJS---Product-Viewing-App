@@ -101,7 +101,8 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     return true;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     const { id, password } = values;
     try {
       await login(id, password);
