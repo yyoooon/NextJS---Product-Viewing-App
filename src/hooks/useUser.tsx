@@ -1,25 +1,28 @@
 import { signIn } from '@/api/auth';
 import { TOKEN_NAME } from '@/constants';
 import { userState } from '@/states/user';
-import { useSetRecoilState } from 'recoil';
+import { useState } from 'react';
+import { useRecoilState } from 'recoil';
 
 const useUser = () => {
-  const setUserState = useSetRecoilState(userState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [isLogin, setIsLogin] = useState(userInfo ? true : false);
 
   const login = async (id: string, password: string) => {
     const { data } = await signIn({ id, password });
     const { accessToken, user } = data.data;
-
     sessionStorage.setItem(TOKEN_NAME, JSON.stringify(accessToken));
-    setUserState({ id: user.ID, name: user.NAME });
+    setUserInfo({ id: user.ID, name: user.NAME });
+    setIsLogin(true);
   };
 
   const logout = () => {
     sessionStorage.removeItem(TOKEN_NAME);
-    setUserState(null);
+    setUserInfo(null);
+    setIsLogin(false);
   };
 
-  return { login, logout };
+  return { isLogin, login, logout };
 };
 
 export default useUser;

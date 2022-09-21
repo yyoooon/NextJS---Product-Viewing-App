@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
-import { usePagination } from '@/hooks';
+import usePagination from './usePagination';
 
 type PaginationProps = {
   currentPage?: number;

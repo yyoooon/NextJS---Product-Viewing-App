@@ -2,7 +2,10 @@ import { atom, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 import { UserInfoType } from '@/types';
 
-const { persistAtom } = recoilPersist();
+const { persistAtom } = recoilPersist({
+  key: 'recoil-persist',
+  storage: typeof window === 'undefined' ? undefined : sessionStorage,
+});
 
 export const userState = atom<UserInfoType | null>({
   key: 'userState',
