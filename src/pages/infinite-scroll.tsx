@@ -43,23 +43,28 @@ const InfiniteScrollPage: NextPage = () => {
     sessionStorage.setItem('CURRENT_PAGE', `${currentPage.current}`);
   };
 
-  useEffect(() => {
+  const checkPrevPageIsProduct = () => {
     const prevPath = sessionStorage.getItem('prevPath')?.split('/')[1];
-    if (prevPath !== 'products') return;
+    return prevPath === 'products';
+  };
 
+  const setStoredData = () => {
     const savedProducts = sessionStorage.getItem('PRODUCTS');
     const savedCurrentPage = sessionStorage.getItem('CURRENT_PAGE');
     if (!savedProducts || !savedCurrentPage) return;
-
     setProducts(JSON.parse(savedProducts));
     currentPage.current = Number(savedCurrentPage);
+  };
+
+  useEffect(() => {
+    if (!checkPrevPageIsProduct()) return;
+    setStoredData();
     setCanScrollMove(true);
   }, []);
 
   useEffect(() => {
     const savedScroll = sessionStorage.getItem('SCROLL_HEIGHT');
     if (!canScrollMove || !savedScroll) return;
-
     window.scrollTo(0, Number(savedScroll));
   }, [canScrollMove]);
 
