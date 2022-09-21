@@ -7,10 +7,26 @@ import setupMSW from '../api/setup';
 import GlobalStyle from '../styles/GlobalStyle';
 import { Layout } from '@/components';
 
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
 setupMSW();
 const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
+  const storePathValues = () => {
+    const storage = globalThis?.sessionStorage;
+    if (!storage) return;
+    const prevPath = storage.getItem('currentPath');
+    storage.setItem('prevPath', prevPath || '');
+    storage.setItem('currentPath', globalThis.location.pathname);
+  };
+
+  useEffect(() => storePathValues, [router.asPath]);
+  // 새로 고침 때에는 렌더링이 다 되고 경로가 바뀐다
+
   return (
     <>
       <RecoilRoot>
