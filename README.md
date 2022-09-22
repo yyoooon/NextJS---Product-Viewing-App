@@ -19,16 +19,15 @@
 
 ### 1. 로그인
 
-<img width="40%" src="https://user-images.githubusercontent.com/81611808/191643497-1a3b12fa-f006-4cb6-8514-9eb1b04aee3a.gif">
-<img width="40%" src="https://user-images.githubusercontent.com/81611808/191643511-62b15a82-440b-4e90-9ec9-5babbd629eb8.gif">
+<img width="40%" src='https://user-images.githubusercontent.com/81611808/191641893-cca52046-1c95-4837-8a99-ab04b94c92be.gif'/>
+<img width="40%" src='https://user-images.githubusercontent.com/81611808/191641901-9ace5a92-b900-41a9-95c5-771e0b78491f.gif'/>
+(reactStrictMode: true로 인해 렌더링이 2번 되는 이슈. false설정 시 정상 동작합니다.)
 
-**주요 파일**
-- components/`LoginForm.tsx`, `useLoginForm.tsx`
-- hooks/ `useUser.tsx`
-- state/ `user.ts`
-- utilities/ `formValidate.ts`
-
-</br>
+**주요 파일** 
+- components/: `LoginForm.tsx`, `useLoginForm.tsx`
+- state/: `user.ts`
+- hooks/: `useUser.tsx`
+- utils/: `formValidate.ts`
 
 ### 1-1. 유효성 검사 로직
 
@@ -50,8 +49,8 @@
 
 - 에러 메세지를 저장하는 객체를 ref, state 총 두개를 만듭니다.
 - 입력될 때마다 유효성 검사를 해서 실패 시 ref에 해당 input 이름의 프로퍼티로 에러 메세지를 저장합니다. (ref니까 리렌더링 발생하지 않음)
-- 포커스가 해제 이벤트 발생 시 에러 state에 에러 ref값을 옮겨 리렌더링해서 에러 메세지를 렌더링합니다.
-- 옳은 값이 입력될 경우 ref에는 해당 input 이름의 프로퍼티 자체를 제거하고, state에는 에러 메세지를 제거해 setState+리렌더링해서 화면에서 메세지를 지웁니다.
+- 포커스 해제 이벤트 발생 시 에러 state에 에러 ref값을 옮겨 리렌더링해서 에러 메세지를 렌더링합니다.
+- 옳은 값이 입력될 경우 ref에는 해당 input 이름의 프로퍼티 자체를 제거하고, state에는 저장된 해당 에러 메세지를 제거해 setState+리렌더링해서 화면에서 메세지를 지웁니다.
 
 </br>
 
@@ -63,10 +62,11 @@
 
 **구현 방법**
 
-- 매 렌더링 마다 이 로직들을 순회하며 조건을 체크합니다.
-  - 1. input값들을 모아둔 values state의 모든 프로퍼티의 값을 순회하며 빈 값이 있는지 체크합니다.
-  - 2. 에러 객체의 프로퍼티 갯수를 체크합니다.
-- 위 조건들이 전부 달성됐을 때 로그인 버튼을 렌더링합니다.
+매 렌더링 마다 이 로직들을 순회하며 조건을 체크합니다.
+1. input값들을 모아둔 values state의 모든 프로퍼티의 값을 순회하며 빈 값이 있는지 체크합니다.
+2. 에러 객체의 프로퍼티 갯수를 체크합니다.
+
+위 조건들이 전부 달성됐을 때 로그인 버튼을 렌더링합니다.
 
 </br>
 
@@ -83,7 +83,6 @@
 - 로그아웃 텍스트를 클릭하면 세션 스토리지와 전역 상태에서 토큰과 유저 정보를 제거합니다.
 
 
-
 > [로그인 구현 중의 트러블 슈팅 기록 링크입니다.](https://yoonnote.notion.site/f7b5c4ebcf4d493eb0dde2f21b3cc243)
 
 
@@ -91,11 +90,11 @@
 
 ### 2. 페이지네이션
 
-<img width="40%" src="https://user-images.githubusercontent.com/81611808/191643622-235f29a6-977b-4437-bd47-feaba7905cb9.gif">
+<img width="40%" src='https://user-images.githubusercontent.com/81611808/191642259-c3189450-5c95-4681-877f-77fc5eb3eddb.gif'/>
 
-**주요 파일**
-- components/`Pagination.tsx`, `usePagination.tsx`
-- pages/ `pagination.tsx`
+**주요 파일** 
+- components/: `Pagination.tsx`, `usePagination.tsx`
+- pages/: `pagination.tsx`
 
 **조건**
 - 한 번에 보이는 페이지의 갯수는 5개 여야합니다.
@@ -136,11 +135,11 @@
 
 ### 3. 무한 스크롤
 
-<img width="40%" src="https://user-images.githubusercontent.com/81611808/191643695-01179579-7585-4714-8da7-82655b240b5f.gif">
+<img width="40%" src='https://user-images.githubusercontent.com/81611808/191642401-9d53835e-5273-4cef-9e72-3cd2f7da4787.gif'/>
 
-**주요 파일**
-- pages/ `infinite-scroll.tsx.tsx`, `_app.tsx`
-- hooks/ `useIntersect.tsx`
+**주요 파일** 
+- pages/: `infinite-scroll.tsx`, `_app.tsx`
+- hooks/: `useIntersect.tsx`
 
 **조건**
 - 스크롤이 페이지 하단에 도달하면 다음 상품을 이어서 보여줍니다.
