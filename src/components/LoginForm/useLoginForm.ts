@@ -32,20 +32,21 @@ const useLoginForm = ({ defaultValue }: UseLoginFormArgType) => {
     setErrorsState({ ...errorsState, [inputName]: '' });
   };
 
-  // 유효성 검사 후 에러 메세지 저장/렌더링
-  const validate = ({
-    name,
-    value,
-    validationTester,
-  }: {
+  type Validate = {
     name: string;
     value: string;
     validationTester: (value: string) => boolean;
-  }) => {
-    if (value && !validationTester(value)) {
+  };
+
+  // 유효성 검사 후 실패 시 에러 메세지 저장, 통과 시 제거
+  const validate = ({ name, value, validationTester }: Validate) => {
+    const isNotValid = value && !validationTester(value);
+
+    if (isNotValid) {
       saveMessageInErrorsRef(name, errorMessage[name]);
       return;
     }
+
     removeMessageInErrorsRef(name);
     removeErrorMessageToInput(name);
   };
