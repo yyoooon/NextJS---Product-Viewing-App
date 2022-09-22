@@ -19,6 +19,15 @@
 
 ### 1. 로그인
 
+<img width="40%" src="https://user-images.githubusercontent.com/81611808/191643497-1a3b12fa-f006-4cb6-8514-9eb1b04aee3a.gif">
+<img width="40%" src="https://user-images.githubusercontent.com/81611808/191643511-62b15a82-440b-4e90-9ec9-5babbd629eb8.gif">
+
+**주요 파일**
+- components/`LoginForm.tsx`, `useLoginForm.tsx`
+- hooks/ `useUser.tsx`
+- state/ `user.ts`
+- utilities/ `formValidate.ts`
+
 ### 1-1. 유효성 검사 로직
 
 **요구 사항**
@@ -52,11 +61,10 @@
 
 **구현 방법**
 
-매 렌더링 마다 이 로직들을 순회하며 조건을 체크합니다.
-1. input값들을 모아둔 values state의 모든 프로퍼티의 값을 순회하며 빈 값이 있는지 체크합니다.
-2. 에러 객체의 프로퍼티 갯수를 체크합니다.
-
-위 조건들이 전부 달성됐을 때 로그인 버튼을 렌더링합니다.
+- 매 렌더링 마다 이 로직들을 순회하며 조건을 체크합니다.
+  - 1. input값들을 모아둔 values state의 모든 프로퍼티의 값을 순회하며 빈 값이 있는지 체크합니다.
+  - 2. 에러 객체의 프로퍼티 갯수를 체크합니다.
+- 위 조건들이 전부 달성됐을 때 로그인 버튼을 렌더링합니다.
 
 </br>
 
@@ -80,6 +88,12 @@
 </br>
 
 ### 2. 페이지네이션
+
+<img width="40%" src="https://user-images.githubusercontent.com/81611808/191643622-235f29a6-977b-4437-bd47-feaba7905cb9.gif">
+
+**주요 파일**
+- components/`Pagination.tsx`, `usePagination.tsx`
+- pages/ `pagination.tsx`
 
 **조건**
 - 한 번에 보이는 페이지의 갯수는 5개 여야합니다.
@@ -119,6 +133,12 @@
 </br>
 
 ### 3. 무한 스크롤
+
+<img width="40%" src="https://user-images.githubusercontent.com/81611808/191643695-01179579-7585-4714-8da7-82655b240b5f.gif">
+
+**주요 파일**
+- pages/ `infinite-scroll.tsx.tsx`, `_app.tsx`
+- hooks/ `useIntersect.tsx`
 
 **조건**
 - 스크롤이 페이지 하단에 도달하면 다음 상품을 이어서 보여줍니다.
