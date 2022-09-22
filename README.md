@@ -20,9 +20,10 @@
 ### 1. 로그인
 
 <img width="40%" src='https://user-images.githubusercontent.com/81611808/191641893-cca52046-1c95-4837-8a99-ab04b94c92be.gif'/>
-<img width="40%" src='https://user-images.githubusercontent.com/81611808/191641901-9ace5a92-b900-41a9-95c5-771e0b78491f.gif'/>
-(reactStrictMode: true로 인해 렌더링이 2번 되는 이슈. false설정 시 정상 동작합니다.)
+<img width="40%" src='https://user-images.githubusercontent.com/81611808/191641901-9ace5a92-b900-41a9-95c5-771e0b78491f.gif'/>(reactStrictMode: true로 인해 렌더링이 2번 되는 이슈. false설정 시 정상 동작합니다.)
 
+
+</br>
 </br>
 
 **주요 파일** 
