@@ -38,6 +38,7 @@ const Container = styled.div`
   width: 180px;
   margin-left: 20px;
   margin-top: 20px;
+  cursor: pointer;
 `;
 
 const Name = styled.h2`

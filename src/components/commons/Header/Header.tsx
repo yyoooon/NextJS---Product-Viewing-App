@@ -60,10 +60,15 @@ const StyledHeader = styled.header`
 
 const Title = styled.h1`
   font-size: 48px;
+  cursor: pointer;
 `;
 
 const InfoBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  & span,
+  & strong {
+    cursor: pointer;
+  }
 `;
