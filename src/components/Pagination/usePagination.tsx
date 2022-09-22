@@ -52,7 +52,7 @@ const usePagination = ({
     if (isFirstGroup) return;
     currentGroupIndex.current -= 1;
     setPages(pagesGroupList.current[currentGroupIndex.current]); // 이전 그룹으로 ui변경
-    onChange(pagesGroupList.current[currentGroupIndex.current][0]); //현재 속한 그룹의 가장 첫번째 페이지로 url변경
+    onChange(pagesGroupList.current[currentGroupIndex.current][limitPageCount - 1]); //현재 속한 그룹의 가장 마지막 페이지로 url변경
   };
 
   const handleClickRight = () => {
