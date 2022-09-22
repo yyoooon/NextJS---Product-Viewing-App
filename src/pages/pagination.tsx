@@ -8,7 +8,7 @@ import { ProductList, Pagination, MessageContainer } from '@/components';
 import { getProducts } from '@/api/product';
 import { Product } from '@/types';
 
-const CONTENTS_LENGTH = 10;
+const PRODUCTS_LENGTH = 10;
 
 const PaginationPage: NextPage = () => {
   const router = useRouter();
@@ -21,7 +21,7 @@ const PaginationPage: NextPage = () => {
   const fetchProducts = async (page: number) => {
     setIsLoading(true);
     try {
-      const { data } = await getProducts(page, CONTENTS_LENGTH);
+      const { data } = await getProducts(page, PRODUCTS_LENGTH);
       const { products } = data.data;
       setProducts(products);
     } catch (error: any) {
@@ -52,7 +52,7 @@ const PaginationPage: NextPage = () => {
             <>
               <ProductList products={products} />
               <Pagination
-                totalPageCount={Math.round(allProducts.length / CONTENTS_LENGTH)}
+                totalPageCount={Math.round(allProducts.length / PRODUCTS_LENGTH)}
                 limitPageCount={5}
                 currentPage={currentPage}
                 onChange={handleChangePage}
