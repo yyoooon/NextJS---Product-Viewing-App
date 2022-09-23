@@ -28,7 +28,7 @@ const InfiniteScrollPage: NextPage = () => {
     setIsLoading(false);
   };
 
-  const ref = useIntersect(async (entry, observer) => {
+  const ref = useIntersect((entry, observer) => {
     observer.unobserve(entry.target);
     const isLastPage = allProducts.length === products.length;
     if (!isLastPage && !isLoading) {
