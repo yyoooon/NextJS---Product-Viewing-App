@@ -1,7 +1,6 @@
 import type { AppProps } from 'next/app';
 import styled from '@emotion/styled';
 import { RecoilRoot } from 'recoil';
-import { QueryClientProvider, QueryClient } from 'react-query';
 
 import setupMSW from '../api/setup';
 import GlobalStyle from '../styles/GlobalStyle';
@@ -11,7 +10,6 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 setupMSW();
-const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -30,15 +28,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <RecoilRoot>
-        <QueryClientProvider client={queryClient}>
-          <GlobalStyle />
-          <Background />
-          <Content>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </Content>
-        </QueryClientProvider>
+        <GlobalStyle />
+        <Background />
+        <Content>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </Content>
       </RecoilRoot>
     </>
   );

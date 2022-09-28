@@ -1,3 +1,3 @@
-export type { UserLoginInfoType } from './user';
-export type { UserInfoType } from './user';
+export type { UserLoginInfo } from './user';
+export type { UserInfo } from './user';
 export type { Product } from './product';

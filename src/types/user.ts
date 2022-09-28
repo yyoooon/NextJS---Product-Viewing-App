@@ -1,9 +1,9 @@
-export type UserLoginInfoType = {
+export type UserLoginInfo = {
   id: string;
   password: string;
 };
 
-export type UserInfoType = {
+export type UserInfo = {
   id: string;
   name: string;
 };

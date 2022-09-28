@@ -38,6 +38,7 @@ const StyledLink = styled.a`
   background-color: #222;
   color: #fff;
   font-size: 24px;
+  cursor: pointer;
 
   & + & {
     margin-top: 40px;

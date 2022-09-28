@@ -18,7 +18,7 @@ const useIntersect = (onIntersect: IntersectHandler, options?: IntersectionObser
     const observer = new IntersectionObserver(callback, options);
     observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [ref, options, callback]);
+  }, [options, callback]);
 
   return ref;
 };
