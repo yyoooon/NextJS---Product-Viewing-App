@@ -9,7 +9,7 @@ import { Product } from '@/types';
 
 const ProductDetailPage: NextPage = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query; // 동적 경로
   const [product, setProduct] = useState<Product>();
   const [isLoading, setIsLoading] = useState(false);
   const [isNotFoundPage, setIsNotFoundPage] = useState(false);
@@ -34,6 +34,13 @@ const ProductDetailPage: NextPage = () => {
       fetchProduct(id);
     }
   }, [id]);
+
+  useEffect(() => {
+    router.beforePopState(() => {
+      sessionStorage.setItem('InfiniteScrollPage', 'restore');
+      return true;
+    });
+  }, []);
 
   return !isNotFoundPage ? (
     !isLoading ? (

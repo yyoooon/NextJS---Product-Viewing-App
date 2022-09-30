@@ -44,9 +44,9 @@ const InfiniteScrollPage: NextPage = () => {
     sessionStorage.setItem('CURRENT_PAGE', `${currentPage.current}`);
   };
 
-  const checkPrevPageIsProduct = () => {
-    const prevPath = sessionStorage.getItem('prevPath')?.split('/')[1];
-    return prevPath === 'products';
+  const checkShouldRestore = () => {
+    const shouldRestore = sessionStorage.getItem('InfiniteScrollPage');
+    return shouldRestore;
   };
 
   const setStoredData = () => {
@@ -59,7 +59,8 @@ const InfiniteScrollPage: NextPage = () => {
 
   // 이전 페이지가 상품 페이지일 경우 세션 스토리지에 저장된 데이터로 초기화
   useEffect(() => {
-    if (!checkPrevPageIsProduct()) return;
+    if (!checkShouldRestore()) return;
+    sessionStorage.removeItem('InfiniteScrollPage');
     setStoredData();
     setIsScrollable(true);
   }, []);
