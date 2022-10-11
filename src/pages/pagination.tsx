@@ -1,47 +1,75 @@
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import type { NextPage } from 'next';
-import React from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled from '@emotion/styled';
 
-import products from '../api/data/products.json';
-import ProductList from '../components/ProductList';
-import Pagination from '../components/Pagination';
+import allProducts from '../api/data/products.json';
+import { ProductList, Pagination, MessageContainer } from '@/components';
+import { getProducts } from '@/api/product';
+import { Product } from '@/types';
+
+const PRODUCTS_LENGTH = 10;
 
 const PaginationPage: NextPage = () => {
   const router = useRouter();
   const { page } = router.query;
+  const [products, setProducts] = useState<Product[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isNotFoundPage, setIsNotFoundPage] = useState(false);
+
+  const fetchProducts = async (page: number) => {
+    setIsLoading(true);
+    try {
+      const { data } = await getProducts(page, PRODUCTS_LENGTH);
+      const { products } = data.data;
+      setProducts(products);
+    } catch (error: any) {
+      if (error.status === 404) {
+        setIsNotFoundPage(true);
+        return;
+      }
+      alert(error.message);
+    }
+    setIsLoading(false);
+  };
+
+  const handleChangePage = (page: number) => {
+    router.push(`pagination?page=${page}`, undefined, { shallow: true, scroll: true });
+  };
+
+  useEffect(() => {
+    if (!page) return;
+    setCurrentPage(Number(page));
+    fetchProducts(Number(page));
+  }, [page]);
 
   return (
     <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
       <Container>
-        <ProductList products={products.slice(0, 10)} />
-        <Pagination />
+        {!isNotFoundPage ? (
+          !isLoading ? (
+            <>
+              <ProductList products={products} />
+              <Pagination
+                totalPageCount={Math.round(allProducts.length / PRODUCTS_LENGTH)}
+                limitPageCount={5}
+                currentPage={currentPage}
+                onChange={handleChangePage}
+              />
+            </>
+          ) : (
+            <MessageContainer>로딩 중입니다.</MessageContainer>
+          )
+        ) : (
+          <MessageContainer>존재하지 않는 페이지입니다.</MessageContainer>
+        )}
       </Container>
     </>
   );
 };
 
 export default PaginationPage;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
 
 const Container = styled.div`
   display: flex;

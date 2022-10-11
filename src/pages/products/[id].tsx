@@ -1,44 +1,68 @@
-import Link from 'next/link';
 import type { NextPage } from 'next';
-import React from 'react';
-import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import styled from '@emotion/styled';
 
-import products from '../../api/data/products.json';
+import { MessageContainer } from '@/components';
+import { getProduct } from '@/api/product';
+import { Product } from '@/types';
 
 const ProductDetailPage: NextPage = () => {
-  const product = products[0];
+  const router = useRouter();
+  const { id } = router.query; // 동적 경로
+  const [product, setProduct] = useState<Product>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isNotFoundPage, setIsNotFoundPage] = useState(false);
 
-  return (
-    <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
-      <Thumbnail src={product.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'} />
-      <ProductInfoWrapper>
-        <Name>{product.name}</Name>
-        <Price>{product.price}원</Price>
-      </ProductInfoWrapper>
-    </>
+  const fetchProduct = async (id: string | string[]) => {
+    setIsLoading(true);
+    try {
+      const { data } = await getProduct(id);
+      setProduct(data.data.product);
+    } catch (error: any) {
+      if (error.status === 404) {
+        setIsNotFoundPage(true);
+        return;
+      }
+      alert(error.message);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchProduct(id);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    router.beforePopState(() => {
+      sessionStorage.setItem('InfiniteScrollPage', 'restore');
+      return true;
+    });
+  }, []);
+
+  return !isNotFoundPage ? (
+    !isLoading ? (
+      <>
+        <Thumbnail
+          src={product?.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'}
+          alt={`${product?.name}상품 사진`}
+        />
+        <ProductInfoWrapper>
+          <Name>{product?.name}</Name>
+          <Price>{product?.price.toLocaleString('ko-KR')}원</Price>
+        </ProductInfoWrapper>
+      </>
+    ) : (
+      <MessageContainer>로딩 중입니다.</MessageContainer>
+    )
+  ) : (
+    <MessageContainer>존재하지 않는 상품입니다.</MessageContainer>
   );
 };
 
 export default ProductDetailPage;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
 
 const Thumbnail = styled.img`
   width: 100%;
@@ -50,12 +74,13 @@ const ProductInfoWrapper = styled.div`
   padding: 0 20px;
 `;
 
-const Name = styled.div`
+const Name = styled.h2`
   font-size: 20px;
   font-weight: bold;
 `;
 
-const Price = styled.div`
+const Price = styled.span`
+  display: block;
   font-size: 18px;
   margin-top: 8px;
 `;
