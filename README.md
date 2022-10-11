@@ -156,7 +156,8 @@
 - 다음 요청을 위해 currentPage에 1을 증가시킵니다.
 - next의 Image태그를 사용해 lazyLoding되도록했습니다.
 
-**스크롤 위치 되돌리기 구현 방법**
+**스크롤 위치 되돌리기 구현 방법**  
+
 nextjs router에 내장된 beforePopState와 sessionStorage를 활용합니다.
 
 - 상품 상세페이지에서 이전페이지(무한스크롤 페이지)로 이동하기 직전에 세션 스토리지에 `InfiniteScrollPage: restore` 라는 값을 저장해줍니다.
